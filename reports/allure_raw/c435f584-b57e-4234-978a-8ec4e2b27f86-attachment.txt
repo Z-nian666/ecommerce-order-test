@@ -1,0 +1,8 @@
+==== DEBUG 完整请求URL: http://127.0.0.1:8000/api/goods/1/, method:put
+==== DEBUG 响应状态码: 200
+==== DEBUG 完整请求URL: http://127.0.0.1:8000/api/orders/create/, method:post
+==== DEBUG 响应状态码: 200
+==== DEBUG 完整请求URL: http://127.0.0.1:8000/api/orders/create/, method:post
+==== DEBUG 响应状态码: 200
+==== DEBUG 完整请求URL: http://127.0.0.1:8000/api/goods/1/, method:get
+==== DEBUG 响应状态码: 200
