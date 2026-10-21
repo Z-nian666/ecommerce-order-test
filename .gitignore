@@ -1,0 +1,39 @@
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# Python缓存
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# 数据库文件
+system/db.sqlite3
+*.db
+
+# IDE配置
+.idea/
+.vscode/
+*.iml
+
+# 临时脚本
+reset_stock.py
+update_stock.py
+check_tables.py
+check_order_fields.py
+add_request_id.py
+check_order.py
+verify_result.py
+verify_stock.py
+
+# Locust日志
+*.log
+
+# 系统临时文件
+.DS_Store
+Thumbs.db
