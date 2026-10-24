@@ -1,0 +1,47 @@
+name: 接口自动化测试CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  api-test:
+    runs-on: windows-latest
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 安装项目依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest-html allure-pytest
+
+      - name: 对齐数据库迁移
+        run: |
+          cd system
+          python manage.py migrate --fake
+
+      - name: 启动后端服务
+        run: |
+          cd system
+          Start-Process python -ArgumentList "manage.py", "runserver"
+          Start-Sleep -Seconds 8
+
+      - name: 执行全量自动化测试
+        run: |
+          pytest --html=reports/report.html --self-contained-html --alluredir=reports/allure-results
+
+      - name: 归档测试报告
+        uses: actions/upload-artifact@v4
+        with:
+          name: 测试报告
+          path: reports/
