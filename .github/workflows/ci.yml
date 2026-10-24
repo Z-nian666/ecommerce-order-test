@@ -22,25 +22,33 @@ jobs:
       - name: 安装项目依赖
         run: |
           python -m pip install --upgrade pip
+          pip install django djangorestframework djangorestframework-simplejwt
           pip install -r requirements.txt
-          pip install pytest-html allure-pytest
+          pip install pytest-html allure-pytest requests
 
-      - name: 对齐数据库迁移
+      - name: 初始化数据库并执行迁移
         run: |
           cd system
-          python manage.py migrate --fake
+          python manage.py makemigrations
+          python manage.py migrate
+
+      - name: 创建测试用户
+        run: |
+          cd system
+          python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_user(username='testuser', password='test123456')"
 
       - name: 启动后端服务
         run: |
           cd system
-          Start-Process python -ArgumentList "manage.py", "runserver"
-          Start-Sleep -Seconds 8
+          Start-Process python -ArgumentList "manage.py", "runserver", "--noreload"
+          Start-Sleep -Seconds 12
 
       - name: 执行全量自动化测试
         run: |
-          pytest --html=reports/report.html --self-contained-html --alluredir=reports/allure-results
+          pytest api_test/testcases/ --html=reports/report.html --self-contained-html --alluredir=reports/allure-results
 
       - name: 归档测试报告
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: 测试报告
